@@ -1,3 +1,5 @@
+import { builder } from '@builder.io/react';
+
 import "./global.css";
 
 import { Toaster } from "@/components/ui/toaster";
@@ -15,6 +17,8 @@ import { AuthProvider } from "./auth/AuthContext";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+builder.init(import.meta.env.BUILDER_PUBLIC_API_KEY);
+
 
 const queryClient = new QueryClient();
 
