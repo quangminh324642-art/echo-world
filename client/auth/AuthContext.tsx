@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
       });
-      const text = await res.text();
+      const text = await res.clone().text();
       let data: any = null;
       try {
         data = text ? JSON.parse(text) : null;
