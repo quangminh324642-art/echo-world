@@ -17,6 +17,7 @@ import { AuthProvider } from "./auth/AuthContext";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+import Register from "./pages/Register";
 builder.init(import.meta.env.BUILDER_PUBLIC_API_KEY);
 
 
