@@ -8,6 +8,7 @@ const STORAGE_KEY = "jph.auth.user";
 export type AuthContextValue = {
   user: User | null;
   login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>;
+  register: (name: string, email: string, password: string) => Promise<{ ok: boolean; error?: string }>;
   logout: () => void;
   isAuthenticated: boolean;
   hasRole: (role: Role) => boolean;
@@ -29,8 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   async function login(email: string, password: string) {
-    // Simple demo auth: admin@jph.local / admin123 => admin
-    // Any other email with password "student" => student
+    // Demo login for now (local-only)
     if (email === "admin@jph.local" && password === "admin123") {
       setUser({ id: "1", name: "Administrator", email, role: "admin" });
       return { ok: true };
@@ -42,6 +42,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { ok: false, error: "Invalid credentials" };
   }
 
+  async function register(name: string, email: string, password: string) {
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) return { ok: false, error: data.error || "Registration failed" };
+      const u = data.user as User;
+      setUser(u);
+      return { ok: true };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { ok: false, error: msg };
+    }
+  }
+
   function logout() {
     setUser(null);
   }
@@ -49,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<AuthContextValue>(() => ({
     user,
     login,
+    register,
     logout,
     isAuthenticated: !!user,
     hasRole: (role: Role) => {
