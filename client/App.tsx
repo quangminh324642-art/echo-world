@@ -1,4 +1,4 @@
-import { builder } from '@builder.io/react';
+import { builder } from "@builder.io/react";
 
 import "./global.css";
 
@@ -17,8 +17,8 @@ import { AuthProvider } from "./auth/AuthContext";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+import Register from "./pages/Register";
 builder.init(import.meta.env.BUILDER_PUBLIC_API_KEY);
-
 
 const queryClient = new QueryClient();
 
@@ -37,9 +37,16 @@ const App = () => (
               <Route path="/exams" element={<Placeholder />} />
               <Route path="/live" element={<Placeholder />} />
               <Route path="/courses" element={<Placeholder />} />
-              <Route path="/admin" element={<ProtectedRoute role="admin"><Admin /></ProtectedRoute>} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute role="admin">
+                    <Admin />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Placeholder />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/about" element={<Placeholder />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
