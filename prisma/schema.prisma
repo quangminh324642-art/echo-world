@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+}
+
+enum Rating {
+  AGAIN
+  HARD
+  GOOD
+  EASY
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  decks        Deck[]
+  cardProgress CardProgress[]
+  reviewLogs   ReviewLog[]
+}
+
+model Deck {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cards Card[]
+
+  @@index([ownerId])
+}
+
+model Card {
+  id        String   @id @default(cuid())
+  deckId    String
+  deck      Deck     @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  front     String
+  back      String
+  hint      String?
+  tags      Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  progress   CardProgress[]
+  reviewLogs ReviewLog[]
+
+  @@index([deckId])
+}
+
+model CardProgress {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardId       String
+  card         Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  due          DateTime
+  intervalDays Int      @default(0)
+  easeFactor   Float    @default(2.5)
+  repetitions  Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, cardId])
+  @@index([userId])
+  @@index([cardId])
+}
+
+model ReviewLog {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardId           String
+  card             Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  rating           Rating
+  reviewedAt       DateTime @default(now())
+  intervalBefore   Int?
+  intervalAfter    Int?
+  easeFactorBefore Float?
+  easeFactorAfter  Float?
+  createdAt        DateTime @default(now())
+
+  @@index([userId])
+  @@index([cardId])
+}
