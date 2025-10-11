@@ -23,6 +23,7 @@
   "dependencies": {
     "@builder.io/react": "^8.2.8",
     "@prisma/client": "^6.17.1",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "zod": "^3.25.76"
