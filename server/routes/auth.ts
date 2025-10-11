@@ -8,13 +8,27 @@ function isValidEmail(email: string) {
 
 export const handleSignup: RequestHandler = async (req, res) => {
   try {
-    const { name, email, password } = req.body as { name?: string; email?: string; password?: string };
-    if (!email || !password) return res.status(400).json({ ok: false, error: "Email and password are required" });
-    if (!isValidEmail(email)) return res.status(400).json({ ok: false, error: "Invalid email" });
-    if (password.length < 6) return res.status(400).json({ ok: false, error: "Password must be at least 6 characters" });
+    const { name, email, password } = req.body as {
+      name?: string;
+      email?: string;
+      password?: string;
+    };
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ ok: false, error: "Email and password are required" });
+    if (!isValidEmail(email))
+      return res.status(400).json({ ok: false, error: "Invalid email" });
+    if (password.length < 6)
+      return res
+        .status(400)
+        .json({ ok: false, error: "Password must be at least 6 characters" });
 
     const existing = await prisma.user.findUnique({ where: { email } });
-    if (existing) return res.status(409).json({ ok: false, error: "Email already registered" });
+    if (existing)
+      return res
+        .status(409)
+        .json({ ok: false, error: "Email already registered" });
 
     const passwordHash = await bcrypt.hash(password, 10);
 

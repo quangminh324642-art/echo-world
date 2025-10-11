@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -46,25 +52,53 @@ export default function Register() {
             <form className="space-y-4" onSubmit={onSubmit}>
               <div>
                 <label className="mb-1 block text-sm font-medium">Name</label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Your name" />
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  placeholder="Your name"
+                />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium">Email</label>
-                <Input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
+                <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  required
+                />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">Password</label>
-                <Input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
+                <label className="mb-1 block text-sm font-medium">
+                  Password
+                </label>
+                <Input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  required
+                />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">Confirm password</label>
-                <Input value={confirm} onChange={(e) => setConfirm(e.target.value)} type="password" required />
+                <label className="mb-1 block text-sm font-medium">
+                  Confirm password
+                </label>
+                <Input
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  type="password"
+                  required
+                />
               </div>
-              <Button type="submit" className="w-full">Sign up</Button>
+              <Button type="submit" className="w-full">
+                Sign up
+              </Button>
             </form>
           </CardContent>
           <CardFooter>
-            <div className="text-xs text-muted-foreground">You will be redirected to: {redirectTo}</div>
+            <div className="text-xs text-muted-foreground">
+              You will be redirected to: {redirectTo}
+            </div>
           </CardFooter>
         </Card>
       </div>

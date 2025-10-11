@@ -7,8 +7,15 @@ const STORAGE_KEY = "jph.auth.user";
 
 export type AuthContextValue = {
   user: User | null;
-  login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>;
-  register: (name: string, email: string, password: string) => Promise<{ ok: boolean; error?: string }>;
+  login: (
+    email: string,
+    password: string,
+  ) => Promise<{ ok: boolean; error?: string }>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+  ) => Promise<{ ok: boolean; error?: string }>;
   logout: () => void;
   isAuthenticated: boolean;
   hasRole: (role: Role) => boolean;
@@ -36,7 +43,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { ok: true };
     }
     if (password === "student") {
-      setUser({ id: "2", name: email.split("@")[0] || "Student", email, role: "student" });
+      setUser({
+        id: "2",
+        name: email.split("@")[0] || "Student",
+        email,
+        role: "student",
+      });
       return { ok: true };
     }
     return { ok: false, error: "Invalid credentials" };
@@ -53,7 +65,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { ok: false, error: `HTTP ${res.status}` };
       }
       const data = (await res.json()) as any;
-      if (!data?.ok) return { ok: false, error: data?.error ?? "Registration failed" };
+      if (!data?.ok)
+        return { ok: false, error: data?.error ?? "Registration failed" };
       const u = data.user as User;
       setUser(u);
       return { ok: true };
@@ -67,21 +80,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   }
 
-  const value = useMemo<AuthContextValue>(() => ({
-    user,
-    login,
-    register,
-    logout,
-    isAuthenticated: !!user,
-    hasRole: (role: Role) => {
-      if (!user) return false;
-      if (role === "guest") return true;
-      if (role === "student") return user.role === "student" || user.role === "instructor" || user.role === "admin";
-      if (role === "instructor") return user.role === "instructor" || user.role === "admin";
-      if (role === "admin") return user.role === "admin";
-      return false;
-    },
-  }), [user]);
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user,
+      login,
+      register,
+      logout,
+      isAuthenticated: !!user,
+      hasRole: (role: Role) => {
+        if (!user) return false;
+        if (role === "guest") return true;
+        if (role === "student")
+          return (
+            user.role === "student" ||
+            user.role === "instructor" ||
+            user.role === "admin"
+          );
+        if (role === "instructor")
+          return user.role === "instructor" || user.role === "admin";
+        if (role === "admin") return user.role === "admin";
+        return false;
+      },
+    }),
+    [user],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -92,7 +114,13 @@ export function useAuth() {
   return ctx;
 }
 
-export function RequireRole({ role, children }: { role: Role; children: React.ReactNode }) {
+export function RequireRole({
+  role,
+  children,
+}: {
+  role: Role;
+  children: React.ReactNode;
+}) {
   const { hasRole } = useAuth();
   if (!hasRole(role)) return null;
   return <>{children}</>;
