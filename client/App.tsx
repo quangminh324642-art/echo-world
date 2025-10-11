@@ -40,7 +40,7 @@ const App = () => (
               <Route path="/courses" element={<Placeholder />} />
               <Route path="/admin" element={<ProtectedRoute role="admin"><Admin /></ProtectedRoute>} />
               <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Placeholder />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/about" element={<Placeholder />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
